@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# Script to allow for git/git-svn or svn updates to be pulled for the cureent directory with all of it's sub directories.
+
+BASE_DIR=`pwd`
+
+function gitBranchName() {
+  git status 2> /dev/null | sed 's!On branch\ \(.*\)! \1!' | sed '2,$d'
+}
+
+function doGitPull() {
+  cd $1
+
+  echo "[INFO] Updating \033[1;34m$1\033[0m: \033[1;32m$(gitBranchName)\033[0m"
+
+  if grep -q "svn" $1/.git/config
+  then
+    echo "[INFO] Using Git SVN rebase for update"
+    git svn rebase
+  else
+    git pull --rebase
+  fi
+}
+
+function doSvnUpdate() {
+  cd $1
+  echo "[INFO] SVN update for: $1"
+  svn up
+}
+
+function updateGitDirs() {
+  echo "[INFO] Updating GIT Repos"
+  find $BASE_DIR -type d -name .git \
+  | xargs -n 1 dirname \
+  | sort \
+  | while read line; do doGitPull $line; done
+}
+
+function updateSvnDirs() {
+  echo "[INFO] Updating SVN Repos"
+  find $BASE_DIR -type d -name .svn \
+  | xargs -n 1 dirname \
+  | sort \
+  | while read line; do doSvnUpdate $line; done
+}
+
+updateGitDirs
+updateSvnDirs
+echo "[INFO] Completed update of all repos in $BASE_DIR"
