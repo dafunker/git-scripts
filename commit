@@ -1,0 +1,33 @@
+#!/bin/sh
+
+#BASE_DIR=`pwd`
+
+#function gitBranchName() {
+#  git status 2> /dev/null | sed 's!On branch\ \(.*\)! \1!' | sed '2,$d'
+#}
+
+function usage() {
+  echo "usage: commit [-g|-h] <arg>"
+  echo "\t* -g: Generate the specified number of commits with a new file for each commit"
+  echo "\t* -h: Display this message"
+}
+
+OPTS=$1
+
+if [[ "$1" = "-g" ]]; then
+  NUM_COMMITS=$2
+  if [[ $NUM_COMMITS -gt 0 ]]; then
+    echo "[INFO] Generate $NUM_COMMITS Commits"
+    for i in `seq 1 $NUM_COMMITS`; do
+      echo "Text for Commit $i" > commit$i.txt
+      git add commit$i.txt
+      git commit -m "Commit $i"
+    done
+    echo "[INFO] Finished generating $NUM_COMMITS commits"
+  else
+    echo "[ERROR] Cannot generate commits using a value of $NUM_COMMITS"
+    usage
+  fi
+else
+  usage
+fi
