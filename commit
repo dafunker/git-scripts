@@ -12,10 +12,12 @@ if [[ "$1" = "-g" ]]; then
   NUM_COMMITS=$2
   if [[ $NUM_COMMITS -gt 0 ]]; then
     echo "[INFO] Generate $NUM_COMMITS Commits"
+    local UUID
     for i in `seq 1 $NUM_COMMITS`; do
-      echo "Text for Commit $i" > commit$i.txt
-      git add commit$i.txt
-      git commit -m "Commit $i"
+      UUID=`uuid`
+      echo "Text for Commit $i" > commit$i-$UUID.txt
+      git add commit$i-$UUID.txt
+      git commit -m "Commit $i $UUID"
     done
     echo "[INFO] Finished generating $NUM_COMMITS commits"
   else
