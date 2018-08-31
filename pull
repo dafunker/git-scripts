@@ -15,9 +15,12 @@ function doGitPull() {
 
   if grep -q "svn" $1/.git/config
   then
+    echo "[INFO] Fetching Updates"
+    git svn fetch
     echo "[INFO] Using Git SVN rebase for update"
     git svn rebase
   else
+    git fetch
     git pull --rebase
   fi
 }
