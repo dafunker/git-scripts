@@ -16,5 +16,10 @@ git tag -a ${TAG} -m "${MESSAGE}"
 if [ $? -eq 0 ]; then
   echo "[INFO] Pushing Tags..."
   git push origin --tags 
+
+  if [ $? -eq 0 ]; then
+    echo "[INFO] Commit Count:"
+    git rev-list --count ${TAG}
+  fi
 fi
 
