@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Script to allow for git/git-svn or svn updates to be pulled for the cureent directory with all of it's sub directories.
+# Script to allow for git/git-svn or svn updates to be pulled for the current directory with all of it's sub directories.
 
 BASE_DIR=`pwd`
 
